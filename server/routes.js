@@ -10,6 +10,14 @@ const deviceSchema = new mongoose.Schema({
 
 const Device = mongoose.model('Device', deviceSchema)
 
+function authorize(req, res, next) {
+    const authHeader = req.headers.authorization
+    if (!authHeader || authHeader !== process.env.AUTH_HEADER) {
+        return res.status(403).send('Unauthorized')
+    }
+    next()
+}
+
 router.get('/devices', async (req, res) => {
     const devices = await Device.find()
     res.send(devices)
@@ -41,7 +49,7 @@ router.put('/devices/:id', async (req, res) => {
     res.send(device)
 })
 
-router.delete('/devices/:id', async (req, res) => {
+router.delete('/devices/:id', authorize, async (req, res) => {
     const device = await Device.findByIdAndRemove(req.params.id)
 
     if (!device) {
