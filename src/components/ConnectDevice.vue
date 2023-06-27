@@ -11,6 +11,9 @@
 </template>
   
 <script>
+import axios from 'axios'
+
+const PORT = process.env.PORT || 3000
 
 export default {
     data() {
@@ -19,14 +22,18 @@ export default {
         }
     },
     methods: {
-        searchDevices() {
-            // Implementiere hier den Code, um nach verfügbaren Bluetooth-Geräten zu suchen.
-            // Aktualisiere die "devices"-Daten in der "BluetoothDevices"-Komponente mit den gefundenen Geräten.
+        async searchDevices() {
+            try {
+                const response = await axios.get(`http://localhost:${PORT}/devices`)
+                this.savedDevices = response.data || []
+            } catch (error) {
+                console.error('Fehler beim Abrufen der Geräte:', error)
+            }
         },
         connectToDevice(device) {
             console.log('connectToDevice', device)
-            // Implementiere hier den Code, um eine Verbindung zu dem ausgewählten Gerät herzustellen.
+            // TODO: Connect to device
         },
     },
 }
-</script>  
+</script>

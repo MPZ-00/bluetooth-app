@@ -10,15 +10,11 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compiles and starts app and server
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+npm run start
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Environment
+App running and working at: 
+- Local: http://localhost:8080 on Microsoft Edge Browser
