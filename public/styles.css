@@ -1,0 +1,71 @@
+:root {
+    --color-background: #ffffff;
+    --color-text: #000000;
+    --color-primary: #007bff;
+    --color-secondary: #6c757d;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-info: #17a2b8;
+}
+
+[data-theme="dark"] {
+    --color-background: #333333;
+    --color-text: #ffffff;
+    --color-primary: #375a7f;
+    --color-secondary: #444444;
+    --color-success: #00bc8c;
+    --color-danger: #e74c3c;
+    --color-warning: #f39c12;
+    --color-info: #3498db;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+.button-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+}
+
+a {
+    color: var(--color-info);
+}
+
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: var(--color-text);
+    margin-top: 60px;
+}
+
+h3 {
+    margin: 40px 0 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+@media (max-width: 600px) {
+    aside {
+        display: none;
+    }
+}
+
+.card {
+    background-color: var(--color-background);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
