@@ -13,32 +13,69 @@
 </template>
   
 <script>
+import axios from 'axios'
+const PORT = process.env.PORT || 3000
+
 export default {
     data() {
         return {
             devices: [],
-            deviceNames: {}, // Fix: Corrected the property name
+            deviceNames: {},
         }
     },
+    mounted() {
+        this.fetchDevices()
+    },
     methods: {
-        connectToDevice(device) {
-            console.log('connectToDevice', device)
-            // Implementiere hier den Code, um eine Verbindung zu dem ausgewählten Gerät herzustellen.
-        },
-        async refresh() {
-            let requestedDevice = await navigator.bluetooth.requestDevice({
-                acceptAllDevices: true,
-            })
-            console.log('requestedDevice', requestedDevice)
-
-            if (!this.devices.find(device => device.id === requestedDevice.id)) {
-                this.devices.push(requestedDevice)
+        async fetchDevices() {
+            try {
+                const response = await axios.get(`http://localhost:${PORT}/devices`)
+                this.devices = response.data || []
+                console.log('Fetch completed')
+            } catch (error) {
+                console.error('Error fetching devices:', error)
             }
         },
-        setDeviceName(device) {
+        async saveDevice(device) {
+            console.log('connectToDevice', device)
+            const connectedDevice = {
+                name: this.getDeviceName(device),
+                id: device.id,
+                connected: true
+            }
+
+            try {
+                const response = await axios.post('/devices', connectedDevice)
+                const newDevice = response.data
+
+                this.devices.push(newDevice)
+            } catch (error) {
+                console.error('Error adding device:', error)
+            }
+        },
+        async refresh() {
+            try {
+                let requestedDevice = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                })
+                console.log('requestedDevice', requestedDevice)
+
+                if (!this.devices.find(device => device.id === requestedDevice.id)) {
+                    this.devices.push(requestedDevice)
+                }
+            } catch (error) {
+                if (error instanceof DOMException && error === 20) {
+                    console.log('User cancelled the requestDevice() chooser.')
+                } else {
+                    console.error('Error refreshing devices:', error)
+                }
+            }
+        },
+        async setDeviceName(device) {
             let newName = prompt('Enter new device name')
             if (newName) {
-                this.deviceNames[device.id] = newName;
+                this.deviceNames[device.id] = newName
+                await this.saveDevice(device)
             }
         },
         getDeviceName(device) {
