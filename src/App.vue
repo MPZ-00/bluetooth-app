@@ -2,12 +2,9 @@
     <div id="app">
         <header>
             <img alt="Vue logo" src="./assets/logo.png">
-            <HelloWorld msg="Welcome to Your Vue.js App" />
-            <!-- Hier könnten Sie eine Navigationsleiste oder ein Logo platzieren -->
         </header>
 
         <aside>
-            <!-- Hier könnten Sie eine Seitenleiste für zusätzliche Informationen oder Links platzieren -->
         </aside>
 
         <main>
@@ -15,18 +12,20 @@
         </main>
 
         <footer>
-            <!-- Hier könnten Sie Copyright-Informationen oder Links zu Datenschutzrichtlinien platzieren -->
+            <FooterVue />
         </footer>
     </div>
 </template>  
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import BluetoothDevices from './components/BluetoothDevices.vue'
+import FooterVue from './components/FooterVue.vue';
 
 export default {
     name: 'App',
     components: {
-        HelloWorld
+        BluetoothDevices,
+        FooterVue
     }
 }
 </script>

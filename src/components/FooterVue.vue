@@ -14,4 +14,11 @@ export default {
         }
     }
 }
-</script>  
+</script>
+
+<style scoped>
+a {
+    color: var(--color-info);
+    text-decoration: none;
+}
+</style>
