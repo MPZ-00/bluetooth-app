@@ -9,7 +9,7 @@
         "start": "concurrently \"npm run serve\" \"cd server && node server.js\""
     },
     "dependencies": {
-        "@vueuse/core": "^10.2.0",
+        "@vueuse/core": "latest",
         "core-js": "^3.8.3",
         "dotenv": "^16.3.1",
         "vue": "^3.2.13"

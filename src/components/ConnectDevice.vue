@@ -1,32 +1,57 @@
+
 <template>
-    <button @click="connect">Gerät verbinden</button>
+    <div class="grid grid-cols-1 gap-x-4 gap-y-4">
+        <div>{{ isSupported ? 'Bluetooth Web API Supported' : 'Your browser does not support the Bluetooth Web API' }}</div>
+
+        <div v-if="isSupported">
+            <button @click="requestDevice()">
+                Request Bluetooth Device
+            </button>
+        </div>
+
+        <div v-if="device">
+            <p>Device Name: {{ device.name }}</p>
+        </div>
+
+        <div v-if="isConnected" class="bg-green-500 text-white p-3 rounded-md">
+            <p>Connected</p>
+        </div>
+
+        <div v-if="!isConnected" class="bg-orange-800 text-white p-3 rounded-md">
+            <p>Not Connected</p>
+        </div>
+
+        <div v-if="error">
+            <div>Errors:</div>
+            <pre>
+      <code class="block p-5 whitespace-pre">{{ error }}</code>
+    </pre>
+        </div>
+    </div>
 </template>
-  
+
 <script>
 import { useBluetooth } from '@vueuse/core'
 
+const {
+    isConnected,
+    isSupported,
+    device,
+    requestDevice,
+    error,
+} = useBluetooth({
+    acceptAllDevices: true,
+})
+
 export default {
     setup() {
-        const { isSupported, isAvailable, requestDevice } = useBluetooth()
-
-        const connect = async () => {
-            if (!isSupported.value || !isAvailable.value) {
-                console.error('Bluetooth is not available')
-                return
-            }
-
-            try {
-                const device = await requestDevice()
-                console.log('Connected to device:', device)
-                // Verbindung zum Server senden, um das Gerät in der Datenbank zu speichern
-            } catch (err) {
-                console.error('Failed to connect:', err)
-            }
-        }
-
         return {
-            connect
+            isConnected,
+            isSupported,
+            device,
+            requestDevice,
+            error,
         }
-    }
+    },
 }
-</script>  
+</script>
