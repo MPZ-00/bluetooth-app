@@ -1,0 +1,21 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - 3000:3000
+    networks:
+      - mynetwork
+
+  app:
+    build:
+      context: ./app
+    ports:
+      - 80:80
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

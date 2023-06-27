@@ -29,7 +29,10 @@ export default {
     methods: {
         async fetchDevices() {
             try {
-                const response = await axios.get(`http://localhost:${PORT}/devices`)
+                const isDocker = process.env.VUE_APP_IS_DOCKER === 'true';
+                const hostname = isDocker ? 'server-container' : 'localhost';
+
+                const response = await axios.get(`http://${hostname}:${PORT}/devices`)
                 this.devices = response.data || []
                 console.log('Fetch completed')
             } catch (error) {
