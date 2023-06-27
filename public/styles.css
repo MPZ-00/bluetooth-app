@@ -77,3 +77,12 @@ button {
     border-radius: 15px;
     border: 2px solid var(--color-primary);
 }
+
+button > a {
+    text-decoration: none;
+    color: var(--color-info);
+}
+button > a:hover {
+    text-decoration: underline;
+    color: var(--color-success)
+}

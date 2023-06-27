@@ -5,9 +5,8 @@
         </header>
 
         <aside>
-            <ConnectDevice />
+            <NavComponent />
         </aside>
-
         <main>
             <BluetoothDevices :devices="savedDevices" />
         </main>
@@ -19,14 +18,14 @@
 <script>
 import BluetoothDevices from './components/BluetoothDevices.vue'
 import FooterVue from './components/FooterVue.vue'
-import ConnectDevice from './components/ConnectDevice.vue'
+import NavComponent from './components/NavComponent.vue'
 
 export default {
     name: 'App',
     components: {
         BluetoothDevices,
         FooterVue,
-        ConnectDevice
+        NavComponent,
     },
     data() {
         return {

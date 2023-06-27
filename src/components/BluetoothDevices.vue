@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Bluetooth Devices</h2>
-        <button @click="refresh">Refresh Devices</button>
+        <button @click="connect">Connect to Device</button>
         <ul>
             <li v-for="device in devices" :key="device.id">
                 {{ getDeviceName(device) }}
@@ -53,7 +53,7 @@ export default {
                 console.error('Error adding device:', error)
             }
         },
-        async refresh() {
+        async connect() {
             try {
                 let requestedDevice = await navigator.bluetooth.requestDevice({
                     acceptAllDevices: true,
@@ -67,7 +67,7 @@ export default {
                 if (error instanceof DOMException && error === 20) {
                     console.log('User cancelled the requestDevice() chooser.')
                 } else {
-                    console.error('Error refreshing devices:', error)
+                    console.error('Error connecting to device:', error)
                 }
             }
         },
