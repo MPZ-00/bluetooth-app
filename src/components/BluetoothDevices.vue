@@ -19,6 +19,7 @@ export default {
     },
     methods: {
         connectToDevice(device) {
+            console.log('connectToDevice', device)
             // Implementiere hier den Code, um eine Verbindung zu dem ausgewählten Gerät herzustellen.
         },
     },

@@ -11,6 +11,7 @@
 </template>
   
 <script>
+
 export default {
     data() {
         return {
@@ -23,6 +24,7 @@ export default {
             // Aktualisiere die "devices"-Daten in der "BluetoothDevices"-Komponente mit den gefundenen Geräten.
         },
         connectToDevice(device) {
+            console.log('connectToDevice', device)
             // Implementiere hier den Code, um eine Verbindung zu dem ausgewählten Gerät herzustellen.
         },
     },
