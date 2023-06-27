@@ -5,6 +5,7 @@
         </header>
 
         <aside>
+            <ConnectDevice />
         </aside>
 
         <main>
@@ -20,12 +21,14 @@
 <script>
 import BluetoothDevices from './components/BluetoothDevices.vue'
 import FooterVue from './components/FooterVue.vue';
+import ConnectDevice from './components/ConnectDevice.vue';
 
 export default {
     name: 'App',
     components: {
         BluetoothDevices,
-        FooterVue
+        FooterVue,
+        ConnectDevice
     }
 }
 </script>
