@@ -69,3 +69,11 @@ li {
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
     padding: 20px;
 }
+
+button {
+    text-transform: uppercase;
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    border-radius: 15px;
+    border: 2px solid var(--color-primary);
+}

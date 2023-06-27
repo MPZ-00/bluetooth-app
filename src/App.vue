@@ -12,16 +12,14 @@
             <BluetoothDevices />
         </main>
 
-        <footer>
-            <FooterVue />
-        </footer>
+        <FooterVue />
     </div>
 </template>  
 
 <script>
 import BluetoothDevices from './components/BluetoothDevices.vue'
-import FooterVue from './components/FooterVue.vue';
-import ConnectDevice from './components/ConnectDevice.vue';
+import FooterVue from './components/FooterVue.vue'
+import ConnectDevice from './components/ConnectDevice.vue'
 
 export default {
     name: 'App',
