@@ -1,19 +1,25 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
+const {
+    Buffer
+} = require('buffer')
+
+const ObjectId = mongoose.Types.ObjectId
 
 const deviceSchema = new mongoose.Schema({
     name: String,
-    id: String,
+    deviceId: String,
     connected: Boolean
 })
 
 const Device = mongoose.model('Device', deviceSchema)
 
-function authorize(req, res, next) {
+const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization
-    if (!authHeader || authHeader !== process.env.AUTH_HEADER) {
-        return res.status(403).send('Unauthorized')
+    if (!authHeader && authHeader !== `Bearer ${process.env.VUE_APP_AUTH_HEADER}`) {
+        res.status(401).send('Authentication failed')
+        return
     }
     next()
 }
@@ -26,7 +32,7 @@ router.get('/devices', async (req, res) => {
 router.post('/devices', async (req, res) => {
     const device = new Device({
         name: req.body.name,
-        id: req.body.id,
+        deviceId: req.body.deviceId,
         connected: req.body.connected
     })
     const result = await device.save()
@@ -34,22 +40,33 @@ router.post('/devices', async (req, res) => {
 })
 
 router.put('/devices/:id', async (req, res) => {
-    const device = await Device.findByIdAndUpdate(req.params.id, {
-        name: req.body.name,
-        id: req.body.id,
-        connected: req.body.connected
-    }, {
-        new: true
-    })
+    try {
+        const deviceId = req.params.id
+        if (!ObjectId.isValid(deviceId)) {
+            return res.status(404).send('Invalid ID')
+        }
 
-    if (!device) {
-        return res.status(404).send('The device with the given ID was not found.')
+        const device = await Device.findByIdAndUpdate(
+            deviceId, {
+                name: req.body.name,
+                deviceId: req.body.deviceId,
+                connected: req.body.connected
+            }, {
+                new: true
+            })
+
+        if (!device) {
+            return res.status(404).send('The device with the given ID was not found.')
+        }
+
+        res.send(device)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send(err)
     }
-
-    res.send(device)
 })
 
-router.delete('/devices/:id', authorize, async (req, res) => {
+router.delete('/devices/:id', authenticate, async (req, res) => {
     const device = await Device.findByIdAndRemove(req.params.id)
 
     if (!device) {
