@@ -12,7 +12,7 @@ This is a simple Bluetooth app that allows users to search for available Bluetoo
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/bluetooth-app.git
+git clone https://github.com/MPZ-00/bluetooth-app.git
 
 ```
 

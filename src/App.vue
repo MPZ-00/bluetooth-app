@@ -1,18 +1,16 @@
 <template>
-    <div id="app">
-        <header>
-            <img alt="Vue logo" src="./assets/logo.png">
-        </header>
+    <header>
+        <img alt="Vue logo" src="./assets/logo_bt.png">
+    </header>
 
-        <aside>
-            <NavComponent />
-        </aside>
-        <main>
-            <BluetoothDevices :devices="savedDevices" />
-        </main>
+    <aside>
+        <NavComponent />
+    </aside>
+    <main>
+        <BluetoothDevices :devices="savedDevices" />
+    </main>
 
-        <FooterVue />
-    </div>
+    <FooterVue />
 </template>  
 
 <script>

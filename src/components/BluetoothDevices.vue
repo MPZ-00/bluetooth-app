@@ -1,12 +1,13 @@
 <template>
     <div>
         <h2>Bluetooth Devices</h2>
-        <button @click="connect">Connect to Device</button>
+        <button @click="connect" class="warning">Connect to Device</button>
         <ul>
             <li v-for="device in devices" :key="device.id">
                 {{ getDeviceName(device) }}
-                <button v-if="!deviceNames[device.id]" @click="setDeviceName(device)">Set Name</button>
-                <button @click="connectToDevice(device)">Connect</button>
+                <button v-if="!deviceNames[device.id]" @click="setDeviceName(device)" class="info">Set Name</button>
+                <button v-if="!device.connected" @click="connectToDevice(device)" class="success">Connect</button>
+                <button v-else @click="disconnectFromDevice(device)" class="danger">Disconnect</button>
             </li>
         </ul>
     </div>
@@ -14,7 +15,10 @@
   
 <script>
 import axios from 'axios'
-const PORT = process.env.PORT || 3000
+const PORT = process.env.VUE_APP_PORT || 3000
+const isDocker = process.env.VUE_APP_IS_DOCKER === 'true'
+const HOSTNAME = isDocker ? 'server-container' : 'localhost'
+
 
 export default {
     data() {
@@ -29,12 +33,8 @@ export default {
     methods: {
         async fetchDevices() {
             try {
-                const isDocker = process.env.VUE_APP_IS_DOCKER === 'true';
-                const hostname = isDocker ? 'server-container' : 'localhost';
-
-                const response = await axios.get(`http://${hostname}:${PORT}/devices`)
+                const response = await axios.get(`http://${HOSTNAME}:${PORT}/devices`)
                 this.devices = response.data || []
-                console.log('Fetch completed')
             } catch (error) {
                 console.error('Error fetching devices:', error)
             }
@@ -48,7 +48,7 @@ export default {
             }
 
             try {
-                const response = await axios.post('/devices', connectedDevice)
+                const response = await axios.post(`http://${HOSTNAME}:${PORT}/devices`, connectedDevice)
                 const newDevice = response.data
 
                 this.devices.push(newDevice)
@@ -83,6 +83,24 @@ export default {
         },
         getDeviceName(device) {
             return this.deviceNames[device.id] || 'No Name'
+        },
+        disconnectFromDevice(device) {
+            console.log('disconnectFromDevice', device)
+            try {
+                device.gatt.disconnect()
+                device.connected = false
+            } catch (error) {
+                console.error('Error disconnecting from device:', error)
+            }
+        },
+        connectToDevice(device) {
+            console.log('connectToDevice', device)
+            try {
+                device.gatt.connect()
+                device.connected = true
+            } catch (error) {
+                console.error('Error connecting to device:', error)
+            }
         },
     },
 }

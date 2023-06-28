@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <a id="copyright" href="https://discord.com/invite/DXWuZUBW2C" target="_blank" rel="noreferrer">
+        <a id="copyright" href="https://github.com/MPZ-00/bluetooth-app" target="_blank" rel="noreferrer">
             Copyright ©️ Martin Prätzlich 2023 - {{ year }} BluetoothApp
         </a>
     </footer>
