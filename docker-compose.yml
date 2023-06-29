@@ -1,21 +1,38 @@
 version: '3'
 services:
-  server:
+  backend:
     build:
       context: ./server
+      dockerfile: Dockerfile
+    restart: always
     ports:
       - 3000:3000
+    depends_on:
+      - mongodb
     networks:
-      - mynetwork
+      - app-network
 
-  app:
+  frontend:
     build:
-      context: ./app
+      context: ./src
+      dockerfile: Dockerfile
+    restart: always
     ports:
-      - 80:80
+      - 8080:8080
     networks:
-      - mynetwork
+      - app-network
+
+  mongodb:
+    image: mongo
+    restart: always
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
 
 networks:
-  mynetwork:
+  app-network:
     driver: bridge
+
+volumes:
+  mongodb_data:

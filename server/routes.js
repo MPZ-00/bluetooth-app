@@ -1,15 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
-const {
-    Buffer
-} = require('buffer')
-
-const ObjectId = mongoose.Types.ObjectId
 
 const deviceSchema = new mongoose.Schema({
     name: String,
-    deviceId: String,
+    id: String,
     connected: Boolean
 })
 
@@ -32,7 +27,7 @@ router.get('/devices', async (req, res) => {
 router.post('/devices', async (req, res) => {
     const device = new Device({
         name: req.body.name,
-        deviceId: req.body.deviceId,
+        id: req.body.id,
         connected: req.body.connected
     })
     const result = await device.save()
@@ -41,24 +36,20 @@ router.post('/devices', async (req, res) => {
 
 router.put('/devices/:id', async (req, res) => {
     try {
-        const deviceId = req.params.id
-        if (!ObjectId.isValid(deviceId)) {
-            return res.status(404).send('Invalid ID')
-        }
-
-        const device = await Device.findByIdAndUpdate(
-            deviceId, {
-                name: req.body.name,
-                deviceId: req.body.deviceId,
-                connected: req.body.connected
-            }, {
-                new: true
-            })
+        const device = await Device.findByIdAndUpdate({
+            id: req.params.id
+        }, {
+            name: req.body.name,
+            id: req.body.id,
+            connected: req.body.connected
+        }, {
+            new: true
+        })
 
         if (!device) {
             return res.status(404).send('The device with the given ID was not found.')
         }
-
+        console.log(device)
         res.send(device)
     } catch (err) {
         console.error(err)

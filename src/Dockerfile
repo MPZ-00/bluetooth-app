@@ -1,11 +1,29 @@
-# Use the official Nginx image as the base image
-FROM nginx:latest
+# Basisimage
+FROM node:14 AS build
 
-# Copy the built app files to the appropriate Nginx directory
-COPY dist/ /usr/share/nginx/html
+# Setzen des Arbeitsverzeichnisses
+WORKDIR /app
 
-# Expose the default Nginx port
+# Kopieren der package.json- und package-lock.json-Dateien
+COPY package*.json ./
+
+# Installieren der Abhängigkeiten
+RUN npm install
+
+# Kopieren des restlichen Projektcodes
+COPY . .
+
+# Build des Vue.js-Projekts
+RUN npm run build
+
+# Finaler Build-Container
+FROM nginx:1.21
+
+# Kopieren der Vue.js-Build-Dateien in den NGINX-Container
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Port, auf dem der NGINX-Server lauschen soll
 EXPOSE 80
 
-# Start Nginx
+# Starten des NGINX-Servers
 CMD ["nginx", "-g", "daemon off;"]
