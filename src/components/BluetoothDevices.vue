@@ -1,11 +1,12 @@
 <template>
     <div>
         <h2>Bluetooth Devices</h2>
-        <button @click="connect" class="warning">Connect to Device</button>
+        <button @click="connect" class="warning">Connect to new Device</button>
         <ul>
             <li v-for="device in devices" :key="device.id">
                 {{ getDeviceName(device) }}
-                <button v-if="!deviceNames[device.id]" @click="setDeviceName(device)" class="info">Set Name</button>
+                <button v-if="getDeviceName(device) === 'No name'" @click="setDeviceName(device)" class="info">Set
+                    Name</button>
                 <button v-if="!device.connected" @click="connectToDevice(device)" class="success">Connect</button>
                 <button v-else @click="disconnectFromDevice(device)" class="danger">Disconnect</button>
             </li>
@@ -26,6 +27,7 @@ export default {
     },
     mounted() {
         this.fetchDevices()
+        console.log('this.devices', this.devices)
     },
     methods: {
         async fetchDevices() {
@@ -37,11 +39,11 @@ export default {
             }
         },
         async saveDevice(device) {
-            console.log('connectToDevice', device)
+            console.log('saveDevice', device)
             const connectedDevice = {
                 name: this.getDeviceName(device),
                 id: device.id,
-                connected: true
+                connected: false
             }
 
             try {
@@ -79,13 +81,15 @@ export default {
             }
         },
         getDeviceName(device) {
-            return this.deviceNames[device.id] || 'No Name'
+            return device.name || this.deviceNames[device.id] || 'No Name'
         },
         disconnectFromDevice(device) {
             console.log('disconnectFromDevice', device)
             try {
-                device.gatt.disconnect()
-                device.connected = false
+                if (device.gatt.connected) {
+                    device.gatt.disconnect()
+                    device.connected = false
+                }
             } catch (error) {
                 console.error('Error disconnecting from device:', error)
             }

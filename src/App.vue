@@ -7,7 +7,12 @@
         <NavComponent />
     </aside>
     <main>
-        <BluetoothDevices :devices="savedDevices" />
+        <section>
+            <BluetoothDevices :devices="savedDevices" />
+        </section>
+        <section>
+            <BluetoothDataSender />
+        </section>
     </main>
 
     <FooterVue />
@@ -17,6 +22,7 @@
 import BluetoothDevices from './components/BluetoothDevices.vue'
 import FooterVue from './components/FooterVue.vue'
 import NavComponent from './components/NavComponent.vue'
+import BluetoothDataSender from './components/BluetoothDataSender.vue'
 
 export default {
     name: 'App',
@@ -24,6 +30,7 @@ export default {
         BluetoothDevices,
         FooterVue,
         NavComponent,
+        BluetoothDataSender,
     },
     data() {
         return {
