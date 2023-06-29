@@ -21,4 +21,14 @@ a {
     color: var(--color-info);
     text-decoration: none;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>
