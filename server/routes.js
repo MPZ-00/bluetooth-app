@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 
+const BEARER_TOKEN = process.env.BEARER_TOKEN || `sEcUrE-ToKeN123`
+
 const deviceSchema = new mongoose.Schema({
     name: String,
     id: String,
@@ -12,7 +14,7 @@ const Device = mongoose.model('Device', deviceSchema)
 
 const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization
-    if (!authHeader && authHeader !== `Bearer ${process.env.VUE_APP_AUTH_HEADER}`) {
+    if (!authHeader && authHeader !== `Bearer ${BEARER_TOKEN}`) {
         res.status(401).send('Authentication failed')
         return
     }
@@ -20,8 +22,13 @@ const authenticate = (req, res, next) => {
 }
 
 router.get('/devices', async (req, res) => {
-    const devices = await Device.find()
-    res.send(devices)
+    try {
+        const devices = await Device.find()
+        res.send(devices)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send(err)
+    }
 })
 
 router.post('/devices', async (req, res) => {

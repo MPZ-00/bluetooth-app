@@ -16,9 +16,6 @@
 <script>
 import axios from 'axios'
 const PORT = process.env.VUE_APP_PORT || 3000
-const isDocker = process.env.VUE_APP_IS_DOCKER === 'true'
-const HOSTNAME = isDocker ? 'server-container' : 'localhost'
-
 
 export default {
     data() {
@@ -33,7 +30,7 @@ export default {
     methods: {
         async fetchDevices() {
             try {
-                const response = await axios.get(`http://${HOSTNAME}:${PORT}/devices`)
+                const response = await axios.get(`http://localhost:${PORT}/devices`)
                 this.devices = response.data || []
             } catch (error) {
                 console.error('Error fetching devices:', error)
@@ -48,7 +45,7 @@ export default {
             }
 
             try {
-                const response = await axios.post(`http://${HOSTNAME}:${PORT}/devices`, connectedDevice)
+                const response = await axios.post(`http://localhost:${PORT}/devices`, connectedDevice)
                 const newDevice = response.data
 
                 this.devices.push(newDevice)
