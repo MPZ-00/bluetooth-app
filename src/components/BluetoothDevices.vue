@@ -1,11 +1,11 @@
 <template>
     <div>
         <h2>Bluetooth Devices</h2>
-        <button @click="connect" class="warning">Connect to new Device</button>
+        <button @click="connect" class="warning">Connect to a Device</button>
         <ul>
             <li v-for="device in devices" :key="device.id">
                 {{ getDeviceName(device) }}
-                <button v-if="getDeviceName(device) === 'No name'" @click="setDeviceName(device)" class="info">Set
+                <button v-if="!device.name" @click="setDeviceName(device)" class="info">Set
                     Name</button>
                 <button v-if="!device.connected" @click="connectToDevice(device)" class="success">Connect</button>
                 <button v-else @click="disconnectFromDevice(device)" class="danger">Disconnect</button>
@@ -59,6 +59,7 @@ export default {
             try {
                 let requestedDevice = await navigator.bluetooth.requestDevice({
                     acceptAllDevices: true,
+                    optionalServices: ['battery_service']
                 })
                 console.log('requestedDevice', requestedDevice)
 
