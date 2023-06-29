@@ -4,12 +4,8 @@
         <button @click="connect" class="warning">Connect to a Device</button>
         <ul>
             <li v-for="device in devices" :key="device.id">
-                <BluetoothDevice 
-                    :device="device"
-                    @set-name="setDeviceName"
-                    @connect="connectToDevice"
-                    @disconnect="disconnectFromDevice"
-                />
+                <BluetoothDevice :device="device" @set-name="setDeviceName" @connect="connectToDevice"
+                    @disconnect="disconnectFromDevice" />
             </li>
         </ul>
     </div>
@@ -58,21 +54,33 @@ export default {
                 console.error('Error adding device:', error)
             }
         },
-        async connectToDevice(device) {
-            navigator.bluetooth.requestDevice({
+        async connectToBluetoothDevice(service) {
+            const device = await navigator.bluetooth.requestDevice({
                 acceptAllDevices: true,
-                optionalServices: [device.service]
+                optionalServices: [service || '0000ffe0-0000-1000-8000-00805f9b34fb']
             })
-            .then(device => {
-                console.log(device)
-                return device.gatt.connect()
-            })
-            .then(() => {
-                this.saveDevice(device)
-            })
-            .catch(error => {
+
+            console.log(device);
+            return device.gatt.connect();
+        },
+        async connectToDevice(device) {
+            try {
+                if (device.connected) {
+                    return
+                }
+                await this.connectToBluetoothDevice(device.service)
+                device.connected = true
+            } catch (error) {
                 console.error('Error connecting to device:', error)
-            })
+            }
+        },
+        async connect() {
+            try {
+                const connectedDevice = await this.connectToBluetoothDevice()
+                await this.saveDevice(connectedDevice)
+            } catch (error) {
+                console.error('Error connecting to device:', error)
+            }
         },
         async disconnectFromDevice(device) {
             device.gatt.disconnect()
