@@ -120,6 +120,7 @@ export default {
         async deleteDevice(device) {
             const token = await this.authenticate()  // Implementiere diese Methode, um einen Authentifizierungstoken vom Server zu erhalten
             try {
+                console.info('Deleting device:', device)
                 await axios.delete(`http://localhost:${PORT}/devices/${device.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`  // Sendet den Authentifizierungstoken in den Headers der Anfrage
@@ -134,10 +135,9 @@ export default {
         async authenticate() {
             try {
                 const response = await axios.post(`http://localhost:${PORT}/auth`, {
-                    code: '123secure_code4'
+                    code: '345tg$%__1miep'
                 })
-                const tempToken = response.data.tempToken
-                return tempToken
+                return response.data.tempToken
             } catch (error) {
                 console.error('Error authenticating:', error)
             }

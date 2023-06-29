@@ -33,7 +33,7 @@ export default {
         },
         deleteDevice() {
             if (!confirm('Are you sure you want to remove this device?')) return
-            this.$emit('remove', this.device)
+            this.$emit('delete', this.device)
         }
     },
 }
