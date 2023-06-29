@@ -134,11 +134,10 @@ export default {
         async authenticate() {
             try {
                 const response = await axios.post(`http://localhost:${PORT}/auth`, {
-                    username: 'admin',
-                    password: 'admin'
+                    code: '123secure_code4'
                 })
-                const token = response.data.token
-                return token
+                const tempToken = response.data.tempToken
+                return tempToken
             } catch (error) {
                 console.error('Error authenticating:', error)
             }

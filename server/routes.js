@@ -1,6 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
+const crypto = require('crypto')
+
+const AUTH_CODE = process.env.AUTH_CODE || `345tg$%__1miep`
+const TOKEN_TTL = 60 * 60 * 1000 * 5 // 1 hour
+const tokens = {} // Stores the temporary tokens
 
 const BEARER_TOKEN = process.env.BEARER_TOKEN || `sEcUrE-ToKeN123`
 
@@ -14,11 +19,14 @@ const Device = mongoose.model('Device', deviceSchema)
 
 const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization
-    if (!authHeader && authHeader !== `Bearer ${BEARER_TOKEN}`) {
-        res.status(401).send('Authentication failed')
-        return
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]
+        if (tokens[token] && Date.now() - tokens[token] <= TOKEN_TTL || token === BEARER_TOKEN) {
+            next()
+            return
+        }
     }
-    next()
+    res.status(401).send('Authentication failed')
 }
 
 router.get('/devices', async (req, res) => {
@@ -73,5 +81,25 @@ router.delete('/devices/:id', authenticate, async (req, res) => {
 
     res.send(device)
 })
+
+router.post('/auth', async (req, res) => {
+    const authHeader = req.headers.authorization
+    if (authHeader && authHeader.split(' ')[1] === BEARER_TOKEN || req.body.code === AUTH_CODE) {
+        const tempToken = crypto.randomBytes(16).toString('hex')
+        tokens[tempToken] = Date.now()
+        return res.json({tempToken: tempToken})
+    }
+
+    res.status(401).send('Authentication failed')
+})
+
+setInterval(() => {
+    // Clean up expired tokens every 5 minutes
+    for (const token in tokens) {
+        if (Date.now() - tokens[token] > TOKEN_TTL) {
+            delete tokens[token]
+        }
+    }
+}, 5 * 60 * 1000) // 5 minutes
 
 module.exports = router
