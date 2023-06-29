@@ -5,7 +5,7 @@
         <ul>
             <li v-for="device in devices" :key="device.id">
                 <BluetoothDevice :device="device" @set-name="setDeviceName" @connect="connectToDevice"
-                    @disconnect="disconnectFromDevice" />
+                    @disconnect="disconnectFromDevice" @delete="deleteDevice" />
             </li>
         </ul>
     </div>
@@ -38,20 +38,36 @@ export default {
             }
         },
         async saveDevice(device) {
-            console.log('saveDevice', device)
             const connectedDevice = {
                 name: this.getDeviceName(device),
                 id: device.id,
                 connected: false
             }
 
-            try {
-                const response = await axios.post(`http://localhost:${PORT}/devices`, connectedDevice)
-                const newDevice = response.data
+            // Check if the device is already in the list
+            const existingDevice = this.devices.find(d => d.id === connectedDevice.id)
 
-                this.devices.push(newDevice)
-            } catch (error) {
-                console.error('Error adding device:', error)
+            if (existingDevice) {
+                // If the device already exists, update it
+                try {
+                    const response = await axios.put(`http://localhost:${PORT}/devices/${connectedDevice.id}`, connectedDevice)
+                    const updatedDevice = response.data
+
+                    const index = this.devices.findIndex(d => d.id === updatedDevice.id)
+                    this.devices.splice(index, 1, updatedDevice)
+                } catch (error) {
+                    console.error('Error updating device:', error)
+                }
+            } else {
+                // If the device does not exist yet, add it
+                try {
+                    const response = await axios.post(`http://localhost:${PORT}/devices`, connectedDevice)
+                    const newDevice = response.data
+
+                    this.devices.push(newDevice)
+                } catch (error) {
+                    console.error('Error adding device:', error)
+                }
             }
         },
         async connectToBluetoothDevice(service) {
@@ -98,6 +114,35 @@ export default {
                 console.error('Error updating device:', error)
             }
         },
+        getDeviceName(device) {
+            return device.name || 'No Name'
+        },
+        async deleteDevice(device) {
+            const token = await this.authenticate()  // Implementiere diese Methode, um einen Authentifizierungstoken vom Server zu erhalten
+            try {
+                await axios.delete(`http://localhost:${PORT}/devices/${device.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`  // Sendet den Authentifizierungstoken in den Headers der Anfrage
+                    }
+                })
+                const index = this.devices.findIndex(d => d.id === device.id)
+                this.devices.splice(index, 1)
+            } catch (error) {
+                console.error('Error deleting device:', error)
+            }
+        },
+        async authenticate() {
+            try {
+                const response = await axios.post(`http://localhost:${PORT}/auth`, {
+                    username: 'admin',
+                    password: 'admin'
+                })
+                const token = response.data.token
+                return token
+            } catch (error) {
+                console.error('Error authenticating:', error)
+            }
+        }
     },
 }
 </script>
