@@ -48,6 +48,13 @@ The app provides the following features:
 - "Set Name" - Click this button to set a name for a device if the name is not available.
 - "Connect" - Click this button to establish a connection to a device.
 
+### Please note the following considerations when using the app:
+
+- The app utilizes the Web Bluetooth API to interact with Bluetooth devices.
+- The Web Bluetooth API does **not** allow direct connection to a Bluetooth device by specifying its address or ID. Instead, it initiates a user selection process through the `navigator.bluetooth.requestDevice` method to prioritize user privacy and prevent abuse.
+- The device objects returned by the API cannot be serialized and stored in a database or server for later reconnection. To reconnect to a device, the `requestDevice` method needs to be called again, and the device must be selected from the list of paired devices.
+- The functionality of Web Bluetooth depends on the permissions and implementation of the specific browser being used. Some browsers may store device information for future connection attempts, while others may not. Additionally, not all features are available in all browsers or platforms.
+
 ## Contributing
 
 If you would like to contribute to this project, feel free to submit a pull request.

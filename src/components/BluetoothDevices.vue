@@ -58,6 +58,38 @@ export default {
                 console.error('Error adding device:', error)
             }
         },
+        async connectToDevice(device) {
+            navigator.bluetooth.requestDevice({
+                acceptAllDevices: true,
+                optionalServices: [device.service]
+            })
+            .then(device => {
+                console.log(device)
+                return device.gatt.connect()
+            })
+            .then(() => {
+                this.saveDevice(device)
+            })
+            .catch(error => {
+                console.error('Error connecting to device:', error)
+            })
+        },
+        async disconnectFromDevice(device) {
+            device.gatt.disconnect()
+        },
+        async setDeviceName(device, newName) {
+            try {
+                const response = await axios.put(`http://localhost:${PORT}/devices/${device.id}`, {
+                    name: newName
+                })
+                const updatedDevice = response.data
+
+                const index = this.devices.findIndex(d => d.id === updatedDevice.id)
+                this.devices.splice(index, 1, updatedDevice)
+            } catch (error) {
+                console.error('Error updating device:', error)
+            }
+        },
     },
 }
 </script>
