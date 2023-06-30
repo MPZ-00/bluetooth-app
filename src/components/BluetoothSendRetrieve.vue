@@ -1,7 +1,11 @@
 <template>
     <div>
         <input type="text" v-model="inputText" placeholder="Enter text to send...">
-        <button @click="sendData">Send Data</button>
+        <button v-if="isConnected" @click="sendData">Send Data</button>
+        <button v-else disabled class="danger">Send Data</button>
+
+        <button v-if="isConnected" @click="receiveData">Receive Data</button>
+        <p v-if="isConnected">Connected to {{ characteristic.uuid }}</p>
         <p>Received Data: {{ receivedText }}</p>
     </div>
 </template>
@@ -32,8 +36,20 @@ export default {
             }
         },
     },
-    mounted() {
-        this.receiveData()
+    props: {
+        characteristic: {
+            type: Object,
+            required: false,
+        },
+        isConnected: {
+            type: Boolean,
+            required: false,
+        },
+    },
+    watch: {
+        isConnected() {
+            this.receivedText = ''
+        },
     },
 }
 </script>

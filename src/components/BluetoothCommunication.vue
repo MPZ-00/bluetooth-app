@@ -17,6 +17,9 @@
         <button @click.prevent="onStartButtonClick" class="success">Search</button>
         <button @click.prevent="onStopButtonClick" class="danger">Stop</button>
     </form>
+
+    <hr />
+
     <BluetoothSendRetrieve v-if="myCharacteristic" :characteristic="myCharacteristic" />
 </template>
 <script>
@@ -36,6 +39,7 @@ export default {
             myCharacteristic: null,
             servicesList,
             characteristicsList,
+            isConnected: false,
         }
     },
     methods: {
@@ -75,6 +79,7 @@ export default {
                 return this.myCharacteristic.startNotifications().then(() => {
                     console.log('> Notifications started')
                     this.myCharacteristic.addEventListener('characteristicvaluechanged', this.handleNotifications)
+                    this.isConnected = true
                 })
             } catch (error) {
                 console.error('Argh! ' + error)
@@ -86,6 +91,9 @@ export default {
                     .then(() => {
                         console.log('> Notifications stopped')
                         this.myCharacteristic.removeEventListener('characteristicvaluechanged', this.handleNotifications)
+                    })
+                    .then(() => {
+                        this.isConnected = false
                     })
                     .catch(error => {
                         console.log('Argh! ' + error)
