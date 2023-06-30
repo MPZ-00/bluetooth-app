@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Bluetooth Devices</h2>
-        <button @click="connect" class="warning">Connect to a Device</button>
+        <button @click="connect" class="warning">Connect to any Device</button>
         <ul>
             <li v-for="device in devices" :key="device.id">
                 <BluetoothDevice :device="device" @set-name="setDeviceName" @connect="connectToDevice"
@@ -121,7 +121,7 @@ export default {
             const token = await this.authenticate()  // Implementiere diese Methode, um einen Authentifizierungstoken vom Server zu erhalten
             try {
                 console.info('Deleting device:', device)
-                await axios.delete(`http://localhost:${PORT}/devices/${device.id}`, {
+                await axios.delete(`http://localhost:${PORT}/devices/${device._id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`  // Sendet den Authentifizierungstoken in den Headers der Anfrage
                     }

@@ -114,3 +114,12 @@ button>a:hover {
 .success:hover {
     color: var(--color-secondary);
 }
+
+form input {
+    border: 2px solid var(--color-primary);
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
