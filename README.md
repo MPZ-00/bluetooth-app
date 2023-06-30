@@ -34,6 +34,13 @@ npm install
 npm run start
 ```
 
+#### via Docker
+do steps 1 and 2
+
+3. Run docker-compose
+```bash
+docker-compose up -d --build
+```
 
 The app should now be running at `http://localhost:8080` and the server at `http://localhost:3000`.
 
