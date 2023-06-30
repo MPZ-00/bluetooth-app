@@ -28,10 +28,20 @@ npm install
 ```
 
 
-4. Start the server:
+4. Start the app:
 
 ```bash
-npm run start
+npm run serve
+```
+
+5. Navigate to the server directory:
+```bash
+cd server
+```
+
+6. Start the server:
+```bash
+node server.js
 ```
 
 #### via Docker
