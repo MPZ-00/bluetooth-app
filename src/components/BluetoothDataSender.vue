@@ -14,8 +14,8 @@
             </option>
         </datalist>
 
-        <button @click.prevent="onStartButtonClick">Start notifications</button>
-        <button @click.prevent="onStopButtonClick">Stop notifications</button>
+        <button @click.prevent="onStartButtonClick" class="success">Start notifications</button>
+        <button @click.prevent="onStopButtonClick" class="danger">Stop notifications</button>
     </form>
 </template>
 <script>
@@ -23,14 +23,13 @@ import characteristicsList from '../utils/charasteristics.js'
 import servicesList from '../utils/services.js'
 
 export default {
-    name: 'BluetoothDataSender',
     data() {
         return {
             service: '',
             characteristic: '',
             myCharacteristic: null,
             servicesList,
-            characteristicsList
+            characteristicsList,
         }
     },
     methods: {
@@ -54,9 +53,16 @@ export default {
         onStartButtonClick() {
             let serviceUuid = this.service.startsWith('0x') ? parseInt(this.service) : this.service
             let characteristicUuid = this.characteristic.startsWith('0x') ? parseInt(this.characteristic) : this.characteristic
+            let options = {}
+
+            if (this.service !== '') {
+                options = { filters: [{ services: [serviceUuid] }] }
+            } else {
+                options = { acceptAllDevices: true }
+            }
 
             console.log('Requesting Bluetooth Device...')
-            navigator.bluetooth.requestDevice({ filters: [{ services: [serviceUuid] }] })
+            navigator.bluetooth.requestDevice(options)
                 .then(device => {
                     console.log('Connecting to GATT Server...')
                     return device.gatt.connect()
