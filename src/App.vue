@@ -22,7 +22,7 @@
 import BluetoothDevices from './components/BluetoothDevices.vue'
 import FooterVue from './components/FooterVue.vue'
 import NavComponent from './components/NavComponent.vue'
-import BluetoothDataSender from './components/BluetoothDataSender.vue'
+import BluetoothDataSender from './components/BluetoothCommunication.vue'
 
 export default {
     name: 'App',
