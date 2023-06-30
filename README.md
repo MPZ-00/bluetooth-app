@@ -7,6 +7,7 @@ This is a simple Bluetooth app that allows users to search for available Bluetoo
 ### Prerequisites
 
 - Node.js: Make sure you have Node.js installed on your computer.
+- Docker (optional)
 
 ### Installation
 
@@ -71,6 +72,8 @@ The app provides the following features:
 - The Web Bluetooth API does **not** allow direct connection to a Bluetooth device by specifying its address or ID. Instead, it initiates a user selection process through the `navigator.bluetooth.requestDevice` method to prioritize user privacy and prevent abuse.
 - The device objects returned by the API cannot be serialized and stored in a database or server for later reconnection. To reconnect to a device, the `requestDevice` method needs to be called again, and the device must be selected from the list of paired devices.
 - The functionality of Web Bluetooth depends on the permissions and implementation of the specific browser being used. Some browsers may store device information for future connection attempts, while others may not. Additionally, not all features are available in all browsers or platforms.
+  
+More information: https://developer.chrome.com/articles/bluetooth
 
 ## Contributing
 
