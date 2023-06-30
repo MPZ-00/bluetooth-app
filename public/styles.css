@@ -115,7 +115,7 @@ button>a:hover {
     color: var(--color-secondary);
 }
 
-form input {
+input {
     border: 2px solid var(--color-primary);
     border-radius: 5px;
     padding: 5px;

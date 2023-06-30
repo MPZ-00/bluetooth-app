@@ -11,7 +11,10 @@
             <BluetoothDevices :devices="savedDevices" />
         </section>
         <section>
-            <BluetoothDataSender />
+            <BluetoothCommunication />
+        </section>
+        <section>
+            <BluetoothSendRetrieve />
         </section>
     </main>
 
@@ -22,7 +25,8 @@
 import BluetoothDevices from './components/BluetoothDevices.vue'
 import FooterVue from './components/FooterVue.vue'
 import NavComponent from './components/NavComponent.vue'
-import BluetoothDataSender from './components/BluetoothCommunication.vue'
+import BluetoothCommunication from './components/BluetoothCommunication.vue'
+import BluetoothSendRetrieve from './components/BluetoothSendRetrieve.vue'
 
 export default {
     name: 'App',
@@ -30,7 +34,8 @@ export default {
         BluetoothDevices,
         FooterVue,
         NavComponent,
-        BluetoothDataSender,
+        BluetoothCommunication,
+        BluetoothSendRetrieve,
     },
     data() {
         return {

@@ -54,6 +54,26 @@ export async function connectToBluetoothDevice(service) {
         optionalServices: [service || '0000ffe0-0000-1000-8000-00805f9b34fb']
     })
 
-    console.log(device);
-    return device.gatt.connect();
+    console.log(device)
+    return device.gatt.connect()
+}
+
+let myCharacteristic // Saves the characteristic for later use.
+
+export async function sendDataToBluetoothDevice(text) {
+    let encoder = new TextEncoder('utf-8')
+    let data = encoder.encode(text)
+    await myCharacteristic.writeValue(data)
+}
+
+export async function receiveDataFromBluetoothDevice() {
+    await myCharacteristic.startNotifications()
+    myCharacteristic.addEventListener('characteristicvaluechanged', handleCharacteristicValueChanged)
+
+    function handleCharacteristicValueChanged(event) {
+        let value = event.target.value
+        let decoder = new TextDecoder('utf-8')
+        let text = decoder.decode(value)
+        return text
+    }
 }

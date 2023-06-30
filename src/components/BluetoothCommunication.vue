@@ -17,13 +17,18 @@
         <button @click.prevent="onStartButtonClick" class="success">Search</button>
         <button @click.prevent="onStopButtonClick" class="danger">Stop</button>
     </form>
+    <BluetoothSendRetrieve v-if="myCharacteristic" :characteristic="myCharacteristic" />
 </template>
 <script>
 import characteristicsList from '../utils/charasteristics.js'
 import servicesList from '../utils/services.js'
 import { connectToBluetoothDevice } from '../utils/bluetoothUtils.js'
+import BluetoothSendRetrieve from './BluetoothSendRetrieve.vue'
 
 export default {
+    components: {
+        BluetoothSendRetrieve,
+    },
     data() {
         return {
             service: '',
