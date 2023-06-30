@@ -13,8 +13,11 @@
   
 <script>
 import axios from 'axios'
-import { fetchDevices, saveDevice, connectToBluetoothDevice, PORT } from '../utils/bluetoothUtils.js'
+import { fetchDevices, saveDevice, connectToBluetoothDevice } from '../utils/bluetoothUtils.js'
 import BluetoothDevice from './BluetoothDevice.vue'
+
+const PORT = process.env.VUE_APP_PORT || 3000
+
 
 export default {
     components: {

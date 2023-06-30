@@ -1,58 +1,59 @@
 import axios from 'axios'
+const PORT = process.env.VUE_APP_PORT || 3000
 
-module.exports = {
-    PORT: process.env.VUE_APP_PORT || 3000,
-    async fetchDevices() {
-        try {
-            const response = await axios.get(`http://localhost:${this.PORT}/devices`)
-            return response.data || []
-        } catch (error) {
-            console.error('Error fetching devices:', error)
-        }
-    },
-    async saveDevice(device, devices) {
-        const connectedDevice = {
-            name: this.getDeviceName(device),
-            id: device.id,
-            connected: false
-        }
-
-        // Check if the device is already in the list
-        const existingDevice = devices.find(d => d.id === connectedDevice.id)
-
-        if (existingDevice) {
-            // If the device already exists, update it
-            try {
-                const response = await axios.put(`http://localhost:${this.PORT}/devices/${connectedDevice.id}`, connectedDevice)
-                const updatedDevice = response.data
-
-                const index = devices.findIndex(d => d.id === updatedDevice.id)
-                devices.splice(index, 1, updatedDevice)
-            } catch (error) {
-                console.error('Error updating device:', error)
-            }
-        } else {
-            // If the device does not exist yet, add it
-            try {
-                const response = await axios.post(`http://localhost:${this.PORT}/devices`, connectedDevice)
-                const newDevice = response.data
-
-                devices.push(newDevice)
-            } catch (error) {
-                console.error('Error adding device:', error)
-            }
-        }
-    },
-    getDeviceName(device) {
-        return device.name || 'No Name'
-    },
-    async connectToBluetoothDevice(service) {
-        const device = await navigator.bluetooth.requestDevice({
-            acceptAllDevices: true,
-            optionalServices: [service || '0000ffe0-0000-1000-8000-00805f9b34fb']
-        })
-
-        console.log(device);
-        return device.gatt.connect();
+export async function fetchDevices() {
+    try {
+        const response = await axios.get(`http://localhost:${PORT}/devices`)
+        return response.data || []
+    } catch (error) {
+        console.error('Error fetching devices:', error)
     }
+}
+
+export async function saveDevice(device, devices) {
+    const connectedDevice = {
+        name: getDeviceName(device),
+        id: device.id,
+        connected: false
+    }
+
+    // Check if the device is already in the list
+    const existingDevice = devices.find(d => d.id === connectedDevice.id)
+
+    if (existingDevice) {
+        // If the device already exists, update it
+        try {
+            const response = await axios.put(`http://localhost:${PORT}/devices/${connectedDevice.id}`, connectedDevice)
+            const updatedDevice = response.data
+
+            const index = devices.findIndex(d => d.id === updatedDevice.id)
+            devices.splice(index, 1, updatedDevice)
+        } catch (error) {
+            console.error('Error updating device:', error)
+        }
+    } else {
+        // If the device does not exist yet, add it
+        try {
+            const response = await axios.post(`http://localhost:${PORT}/devices`, connectedDevice)
+            const newDevice = response.data
+
+            devices.push(newDevice)
+        } catch (error) {
+            console.error('Error adding device:', error)
+        }
+    }
+}
+
+export function getDeviceName(device) {
+    return device.name || 'No Name'
+}
+
+export async function connectToBluetoothDevice(service) {
+    const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: [service || '0000ffe0-0000-1000-8000-00805f9b34fb']
+    })
+
+    console.log(device);
+    return device.gatt.connect();
 }
