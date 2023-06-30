@@ -1,12 +1,19 @@
 <template>
     <div>
+        <button v-if="isConnected">Connected to {{ characteristic.uuid }}</button>
+        <button v-else>Not connected</button>
+        <br>
+        <br>
+
         <input type="text" v-model="inputText" placeholder="Enter text to send...">
         <button v-if="isConnected" @click="sendData">Send Data</button>
         <button v-else disabled class="danger">Send Data</button>
 
         <button v-if="isConnected" @click="receiveData">Receive Data</button>
-        <p v-if="isConnected">Connected to {{ characteristic.uuid }}</p>
-        <p>Received Data: {{ receivedText }}</p>
+        <br>
+
+        <h3>Received Data:</h3>
+        <input type="text" v-model="receivedText" placeholder="Received Data:" readonly />
     </div>
 </template>
   
@@ -53,4 +60,11 @@ export default {
     },
 }
 </script>
-  
+
+<style scoped>
+p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+}
+</style>
