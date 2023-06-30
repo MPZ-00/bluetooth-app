@@ -16,6 +16,11 @@
         <section>
             <BluetoothSendRetrieve />
         </section>
+        <section>
+            <br>
+            <hr />
+            <BatteryDevice />
+        </section>
     </main>
 
     <FooterVue />
@@ -27,6 +32,7 @@ import FooterVue from './components/FooterVue.vue'
 import NavComponent from './components/NavComponent.vue'
 import BluetoothCommunication from './components/BluetoothCommunication.vue'
 import BluetoothSendRetrieve from './components/BluetoothSendRetrieve.vue'
+import BatteryDevice from './components/BatteryDevice.vue'
 
 export default {
     name: 'App',
@@ -36,6 +42,7 @@ export default {
         NavComponent,
         BluetoothCommunication,
         BluetoothSendRetrieve,
+        BatteryDevice,
     },
     data() {
         return {

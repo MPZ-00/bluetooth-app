@@ -25,7 +25,7 @@
 <script>
 import characteristicsList from '../utils/charasteristics.js'
 import servicesList from '../utils/services.js'
-import { connectToBluetoothDevice } from '../utils/bluetoothUtils.js'
+import { connectToBluetoothDevice, saveDevice } from '../utils/bluetoothUtils.js'
 import BluetoothSendRetrieve from './BluetoothSendRetrieve.vue'
 
 export default {
@@ -80,6 +80,7 @@ export default {
                     console.log('> Notifications started')
                     this.myCharacteristic.addEventListener('characteristicvaluechanged', this.handleNotifications)
                     this.isConnected = true
+                    saveDevice(gattServer.device)
                 })
             } catch (error) {
                 console.error('Argh! ' + error)

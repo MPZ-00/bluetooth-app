@@ -18,7 +18,6 @@ import BluetoothDevice from './BluetoothDevice.vue'
 
 const PORT = process.env.VUE_APP_PORT || 3000
 
-
 export default {
     components: {
         BluetoothDevice,

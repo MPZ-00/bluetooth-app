@@ -55,7 +55,8 @@ export async function connectToBluetoothDevice(service) {
     })
 
     console.log(device)
-    return device.gatt.connect()
+    device.gatt.connect()
+    return device
 }
 
 let myCharacteristic // Saves the characteristic for later use.
